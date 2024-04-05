@@ -18,6 +18,11 @@ const addSchema = z.object({
     image: imageScehma.refine((file) => file.size > 0, "Required"),
 });
 
+const editSchema = addSchema.extend({
+    file: fileSchema.optional(),
+    image: imageScehma.optional(),
+});
+
 export async function addProducts(prevState: unknown, formData: FormData) {
     const productObject = Object.fromEntries(formData.entries());
 
@@ -59,6 +64,69 @@ export async function addProducts(prevState: unknown, formData: FormData) {
     redirect("/admin/products");
 }
 
+export async function updateProduct(
+    id: string,
+    prevState: unknown,
+    formData: FormData
+) {
+    const productObject = Object.fromEntries(formData.entries());
+
+    const result = editSchema.safeParse(productObject);
+
+    if (!result.success) {
+        return result.error.formErrors.fieldErrors;
+    }
+
+    const productData = result.data;
+
+    const product = await prisma.product.findUnique({
+        where: { id },
+    });
+
+    if (!product) {
+        return notFound();
+    }
+
+    let filePath = product.filePath;
+    if (productData.file != null && productData.file.size > 0) {
+        await fs.unlink(product.filePath);
+
+        filePath = `products/${crypto.randomUUID()}~${productData.file.name}`;
+
+        await fs.writeFile(
+            filePath,
+            Buffer.from(await productData.file.arrayBuffer())
+        );
+    }
+
+    let imagePath = product.imagePath;
+    if (productData.image != null && productData.image.size > 0) {
+        await fs.unlink(`public${product.imagePath}`);
+
+        imagePath = `/products/${crypto.randomUUID()}~${
+            productData.image.name
+        }`;
+
+        await fs.writeFile(
+            `public${imagePath}`,
+            Buffer.from(await productData.image.arrayBuffer())
+        );
+    }
+
+    await prisma.product.update({
+        where: { id },
+        data: {
+            name: productData.name,
+            description: productData.description,
+            priceInCents: productData.priceInCents,
+            filePath,
+            imagePath,
+        },
+    });
+
+    redirect("/admin/products");
+}
+
 export async function toggleProductAvailability(
     id: string,
     isAvailableForPurchase: boolean
@@ -85,4 +153,3 @@ export async function deleteProduct(id: string) {
         fs.unlink(`public/${product.imagePath}`),
     ]);
 }
-//

@@ -113,7 +113,7 @@ async function ProductsTable() {
                                     </DropdownMenuItem>
                                     <DropdownMenuItem asChild>
                                         <Link
-                                            href={`admin/products/${product.id}/edit`}
+                                            href={`/admin/products/${product.id}/edit`}
                                         >
                                             Edit
                                         </Link>
