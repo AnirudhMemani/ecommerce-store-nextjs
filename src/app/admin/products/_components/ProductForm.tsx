@@ -8,6 +8,7 @@ import { formatCurrency } from "@/lib/formatters";
 import { useState } from "react";
 import { addProducts } from "../../_actions/products";
 import { useFormState, useFormStatus } from "react-dom";
+import { cn } from "@/lib/utils";
 
 export function ProductForm() {
     const [priceInCents, setPriceInCents] = useState<number>();
@@ -98,6 +99,7 @@ function SubmitButton() {
         <Button
             type="submit"
             disabled={pending}
+            className={"!disabled:cursor-not-allowed"}
         >
             {pending ? "Saving..." : "Save"}
         </Button>

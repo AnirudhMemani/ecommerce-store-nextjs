@@ -16,17 +16,22 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    ActiveToggleDropdonwItem,
+    DeleteDropdownItem,
+} from "./_components/ProductActions";
 
 export default function AdminProductsPage() {
     return (
         <>
             <div className="flex justify-between items-center gap-4">
                 <PageHeader>Products</PageHeader>
-                <Button>
-                    <Link href={"/admin/products/new"}>Add Product</Link>
-                </Button>
+                <Link href={"/admin/products/new"}>
+                    <Button>Add Product</Button>
+                </Link>
             </div>
             <ProductsTable />
         </>
@@ -70,13 +75,13 @@ async function ProductsTable() {
                         <TableCell>
                             {product.isAvailableForPurchase ? (
                                 <>
-                                    <CheckCircle2 />
+                                    <CheckCircle2 className="stroke-green-600" />
                                     <span className="sr-only">Available</span>
                                 </>
                             ) : (
                                 <>
                                     <>
-                                        <XCircle />
+                                        <XCircle className="stroke-destructive" />
                                         <span className="sr-only">
                                             Unavailable
                                         </span>
@@ -98,7 +103,7 @@ async function ProductsTable() {
                                     <span className="sr-only">Actions</span>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
                                         <a
                                             download
                                             href={`/admin/products/${product.id}/download`}
@@ -106,6 +111,24 @@ async function ProductsTable() {
                                             Download
                                         </a>
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem asChild>
+                                        <Link
+                                            href={`admin/products/${product.id}/edit`}
+                                        >
+                                            Edit
+                                        </Link>
+                                    </DropdownMenuItem>
+                                    <ActiveToggleDropdonwItem
+                                        id={product.id}
+                                        isAvailableForPurchase={
+                                            product.isAvailableForPurchase
+                                        }
+                                    />
+                                    <DropdownMenuSeparator />
+                                    <DeleteDropdownItem
+                                        id={product.id}
+                                        disabled={product._count.orders > 0}
+                                    />
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </TableCell>
