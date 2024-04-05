@@ -85,3 +85,4 @@ export async function deleteProduct(id: string) {
         fs.unlink(`public/${product.imagePath}`),
     ]);
 }
+//
