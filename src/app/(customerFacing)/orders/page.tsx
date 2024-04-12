@@ -45,7 +45,6 @@ export default function MyOrdersPage() {
                 </CardContent>
                 <CardFooter>
                     {data.message ? <p>{data.message}</p> : <SubmitButton />}
-                    <SubmitButton />
                 </CardFooter>
             </Card>
         </form>
