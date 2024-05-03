@@ -32,12 +32,13 @@ async function isAuthentication(req: NextRequest): Promise<boolean> {
         .split(":");
 
     return (
-        username === process.env.ADMIN_USERNAME &&
-        (await isValidPassword(
-            password,
-            process.env.HASHED_ADMIN_PASSWORD ||
-                "$2a$10$ddPGpWtRxpdbnrbX8kARg.P13igMACpfYp6yPRc/BRDk4tKAH8Bqi"
-        ))
+        username === process.env.ADMIN_USERNAME ||
+        ("admin" &&
+            (await isValidPassword(
+                password,
+                process.env.HASHED_ADMIN_PASSWORD ||
+                    "$2a$10$ddPGpWtRxpdbnrbX8kARg.P13igMACpfYp6yPRc/BRDk4tKAH8Bqi"
+            )))
     );
 }
 
