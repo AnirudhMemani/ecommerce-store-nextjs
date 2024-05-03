@@ -51,6 +51,7 @@ export async function addProducts(prevState: unknown, formData: FormData) {
         `public${imagePath}`,
         Buffer.from(await productData.image.arrayBuffer())
     );
+    //
 
     await prisma.product.create({
         data: {
