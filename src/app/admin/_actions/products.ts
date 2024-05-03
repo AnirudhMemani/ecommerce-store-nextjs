@@ -2,7 +2,7 @@
 
 import prisma from "@/db/db";
 import z from "zod";
-import fs from "fs/promises";
+import { promises as fs } from "fs";
 import { notFound, redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

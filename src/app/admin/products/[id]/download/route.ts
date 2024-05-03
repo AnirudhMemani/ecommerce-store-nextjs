@@ -1,7 +1,7 @@
 import prisma from "@/db/db";
 import { notFound } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
+import { promises as fs } from "fs";
 
 export async function GET(
     req: NextRequest,
