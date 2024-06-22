@@ -8,7 +8,7 @@ export async function GET(
         params: { donwloadVerificationId },
     }: { params: { donwloadVerificationId: string } }
 ) {
-    const data = await prisma.downloadVerification.findUnique({
+    const data = await prisma.downloadVerification.findFirst({
         where: { id: donwloadVerificationId, expiresAt: { gt: new Date() } },
         select: { product: { select: { filePath: true, name: true } } },
     });

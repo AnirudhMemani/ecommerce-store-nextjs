@@ -18,9 +18,22 @@ export default async function PurchasePage({
         return notFound();
     }
 
+    const customer = await stripe.customers.create({
+        name: "Customer",
+        address: {
+            line1: "510 Townsend St",
+            postal_code: "98140",
+            city: "San Francisco",
+            state: "CA",
+            country: "US",
+        },
+    });
+
     const paymentIntent = await stripe.paymentIntents.create({
+        customer: customer.id,
         amount: product.priceInCents,
         currency: "USD",
+        description: "Digital product",
         metadata: { productId: product.id },
     });
 
